@@ -1,20 +1,21 @@
 <html>
     <head>
       {% if title %}
-      <title>{{ title }} - Bundy's Book Bin</title>
+      <title>{{ title }} - Misery and Co.</title>
       {% else %}
-      <title>Welcome to Bundy's Book Bin</title>
+      <title>Welcome to Misery and Co.</title>
       {% endif %}
     </head>
     <body>
 
       <!-- menu -->
         <hr>
-        <div>Bundy's Book Bin:
+        <div>Misery and Co.:
           <a href="{{ url_for('index') }}">Home</a>
           {% if current_user.is_anonymous %}
           <a href="{{ url_for('login') }}">Login</a>
           {% else %}
+          <a href="{{ url_for('user', username=current_user.username) }}">Profile</a>
           <a href="{{ url_for('logout') }}">Logout</a>
           {% endif %}
         </div>
