@@ -1,0 +1,21 @@
+html {
+  background: white;
+  padding: 1rem;
+  
+}
+
+body {
+  font-family: 'Averia Libre', cursive;
+}
+
+h1 {
+  font-size: 3em;
+}
+
+.navbar {
+  font-size: 2em;
+}
+
+.navbar-brand {
+  font-size: 2em;
+}
