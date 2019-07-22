@@ -1,11 +1,14 @@
 html {
-  background: white;
+  background: #fab664;
   padding: 1rem;
-  
+
 }
 
 body {
   font-family: 'Averia Libre', cursive;
+  background-color: #252526;
+  color: #e09c4a;
+  border-radius: 10px;
 }
 
 h1 {
@@ -14,8 +17,22 @@ h1 {
 
 .navbar {
   font-size: 2em;
+  border-radius: 0;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+@media (max-width: 550px) {
+  .navbar {
+    font-size: 1em;
+  }
 }
 
 .navbar-brand {
-  font-size: 2em;
+  font-size: 2.5em;
+
+}
+
+.btn {
+  margin: 10px;
 }
