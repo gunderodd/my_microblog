@@ -1,33 +1,5 @@
 {% extends 'bootstrap/base.html' %}
 
-{% block styles %}
-{{super()}}
-  <link rel="stylesheet" href="{{url_for('.static', filename='style.css')}}">
-  <link href="https://fonts.googleapis.com/css?family=Averia+Libre&display=swap" rel="stylesheet">
-{% endblock %}
-<!-- the above section is unique to my app to connect the styles sheet -->
-
-{% block scripts %}
-    {{ super() }}
-    {{ moment.include_moment() }}
-    {{ moment.lang(g.locale) }}
-    <script>
-      function translate(sourceElem, destElem, sourceLang, destLang) {
-        $(destElem).html('<img src="{{ url_for('static', filename='loading.gif') }}">');
-        $.post('/translate', {
-          text: $(sourceElem).text(),
-          source_language: sourceLang,
-          dest_language: destLang
-        }).done(function(response) {
-          $(destElem).text(response['text'])
-        }).fail(function() {
-          $(destElem).text("{{ _('Error: Could not contact server.') }}");
-        });
-      }
-      </script>
-{% endblock %}
-<!-- chapter 12 changes -->
-
 {% block title %}
     {% if title %}{{ title }} - Misery and Co.{% else %}{{ _('Welcome to Misery and Co.') }}{% endif %}
 {% endblock %}
@@ -42,19 +14,26 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{{ url_for('index') }}">Misery and Co.</a>
+                <a class="navbar-brand" href="{{ url_for('main.index') }}">Misery and Co.</a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                  <li><a href="{{ url_for('index') }}">{{ _('Home') }}</a></li>
-                  <li><a href="{{ url_for('commiserate') }}">{{ _('Commiserate') }}</a></li>
+                    <li><a href="{{ url_for('main.index') }}">{{ _('Home') }}</a></li>
+                    <li><a href="{{ url_for('main.commiserate') }}">{{ _('Commiserate') }}</a></li>
                 </ul>
+                {% if g.search_form %}
+                <form class="navbar-form navbar-left" method="get" action="{{ url_for('main.search') }}">
+                    <div class="form-group">
+                        {{ g.search_form.q(size=20, class='form-control', placeholder=g.search_form.q.label.text) }}
+                    </div>
+                </form>
+                {% endif %}
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_anonymous %}
-                    <li><a href="{{ url_for('login') }}">{{ _('Login') }}</a></li>
+                    <li><a href="{{ url_for('auth.login') }}">{{ _('Login') }}</a></li>
                     {% else %}
-                    <li><a href="{{ url_for('user', username=current_user.username) }}">{{ _('Profile') }}</a></li>
-                    <li><a href="{{ url_for('logout') }}">{{ _('Logout') }}</a></li>
+                    <li><a href="{{ url_for('main.user', username=current_user.username) }}">{{ _('Profile') }}</a></li>
+                    <li><a href="{{ url_for('auth.logout') }}">{{ _('Logout') }}</a></li>
                     {% endif %}
                 </ul>
             </div>
@@ -75,4 +54,26 @@
         {# application content needs to be provided in the app_content block #}
         {% block app_content %}{% endblock %}
     </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <link href="https://fonts.googleapis.com/css?family=Averia+Libre&display=swap" rel="stylesheet">
+    {{ moment.include_moment() }}
+    {{ moment.lang(g.locale) }}
+    <script>
+        function translate(sourceElem, destElem, sourceLang, destLang) {
+            $(destElem).html('<img src="{{ url_for('static', filename='loading.gif') }}">');
+            $.post('/translate', {
+                text: $(sourceElem).text(),
+                source_language: sourceLang,
+                dest_language: destLang
+            }).done(function(response) {
+                $(destElem).text(response['text'])
+            }).fail(function() {
+                $(destElem).text("{{ _('Error: Could not contact server.') }}");
+            });
+        }
+    </script>
 {% endblock %}
